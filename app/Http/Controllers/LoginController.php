@@ -124,7 +124,7 @@ class LoginController extends Controller
             ]);
 
             $recaptchaData = $response->json();
-
+                // Verificar que el recaptcha es valido
             if (!$recaptchaData['success']) {
                 // El reCAPTCHA no se validó correctamente
                 $message = 'Error en validacion de recaptcha formulario de registro';

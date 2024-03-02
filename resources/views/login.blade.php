@@ -315,7 +315,7 @@
       width: 60%;
     }
   </style>
-  <title>Registro</title>
+  <title>Login</title>
 </head>
 
 <body>
@@ -344,6 +344,9 @@
         @endif
         </small>
         <div style="width: 65%;margin: 0 auto;" class="g-recaptcha" data-sitekey="6Leeyl4pAAAAAJ7cAyMX9Z3UKGj8Z39k9Zv3t73p" required></div><br>
+        <div>
+          <a href="/registro">registrate</a>
+        </div>
         @if ($errors->any())
         <div >
             <ul>
