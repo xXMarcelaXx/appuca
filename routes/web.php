@@ -26,7 +26,8 @@ Route::get('/registro', [LoginController::class, 'registro']);
 Route::get('/iniciarSesion', [LoginController::class, 'iniciarSesion'])->name('iniciarSesion');
 Route::post('/login', [LoginController::class, 'login'])->name('login');
 Route::get('mandarSMS/{id}',[LoginController::class, 'mandarSMS'])->name('mandarSMS');
-Route::post('/validar-codigo',[LoginController::class, 'validarCodigo'])->name('validar-codigo');
+Route::get('mandarCorreo{id}',[LoginController::class, 'mandarCorreo'])->name('mandarCorreo');
+Route::post('/validar-codigo{id}',[LoginController::class, 'validarCodigo'])->name('validar-codigo');
 
 Route::post('/registrar-usuario', [LoginController::class, 'registrarUsuario'])->name('registrar-usuario');
 

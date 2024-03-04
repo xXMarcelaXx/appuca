@@ -169,7 +169,7 @@
     }
 
 
-
+    
 
 
 
@@ -315,7 +315,7 @@
       width: 60%;
     }
   </style>
-  <title>Login</title>
+  <title>Codigo</title>
 </head>
 
 <body>
@@ -328,47 +328,25 @@
       </div><br><br>
 
       <!-- Login Form -->
-      <form method="POST" action="{{route('login')}}" onsubmit="return validarRecaptcha()">
-        @csrf
-        <p>Login</p>
-        <input type="email" id="email" class="fadeIn third" name="email" placeholder="Correo" required><br>
-        <small class="form-text text-danger">
-          @if($errors->has('email'))
-          {{$errors->first('email')}}
-          @endif
-        </small>
-        <input type="password" id="password" class="fadeIn third" name="password" placeholder="Contraseña" required><br>
-        <small class="form-text text-danger">
-          @if($errors->has('password'))
-          {{$errors->first('password')}}
-          @endif
-        </small>
-        <div style="width: 65%;margin: 0 auto;" class="g-recaptcha" data-sitekey="6Leeyl4pAAAAAJ7cAyMX9Z3UKGj8Z39k9Zv3t73p" required></div><br>
-        <div>
-          <a href="/registro">registrate</a>
-        </div>
-        @if ($errors->any())
-        <div>
-          <ul>
-            @foreach ($errors->all() as $error)
-            <li style="font-size: 12px; color: red;">{{ $error }}</li>
-            @endforeach
-          </ul>
-        </div>
-        @endif
-        <input type="submit" class="fadeIn fourth" value="iniciar sesion">
+      <form method="POST" action="{{route('validar-codigo', ['id' => $id])}}" onsubmit="return validarRecaptcha()">
+      @csrf
+        <p>Validar Codigo</p>
+        <input type="text" id="codigo" class="fadeIn second" name="codigo" placeholder="Escribe el codigo" required>
+        <div style="width: 65%;margin: 0 auto;" class="g-recaptcha" data-sitekey="6Leeyl4pAAAAAJ7cAyMX9Z3UKGj8Z39k9Zv3t73p" required></div>
+        <input type="submit" class="fadeIn fourth" value="Validar">
+
       </form>
 
       <script>
-        function validarRecaptcha() {
-          var response = grecaptcha.getResponse();
-          if (response.length === 0) {
-            alert('Por favor, completa el reCAPTCHA.');
-            return false; // Evita que se envíe el formulario
-          }
-          return true; // Permite el envío del formulario
-        }
-      </script>
+    function validarRecaptcha() {
+      var response = grecaptcha.getResponse();
+      if (response.length === 0) {
+        alert('Por favor, completa el reCAPTCHA.');
+        return false; // Evita que se envíe el formulario
+      }
+      return true; // Permite el envío del formulario
+    }
+  </script>
 
     </div>
   </div>
