@@ -155,11 +155,11 @@ class LoginController extends Controller
             if ($user && !$user->hasRole('admin')) {
 
                 // Autenticar al usuario visitante
-                if (Auth::attempt(['email' => $request->email, 'password' => $request->password])) {
+                if (Hash::check($request->password, $user->password)) {
                     $message = 'Se logeo un usuario visitante con id: ' . $user->id;
                     Log::info($message);
                     Log::channel('slackinfo')->info('LoginController@login (appuca) Se logeo usuario visitante', [$user]);
-                    $request->session()->regenerate();
+                    Auth::login($user, true);
                     return redirect()->route('index', ['id' => $user->id]);
                 } else {
                     return redirect('iniciarSesion')->withErrors(['errors' => 'Las credenciales proporcionadas son incorrectas.']);
@@ -316,7 +316,7 @@ class LoginController extends Controller
             }
             if (password_verify($request->codigo, $user->codigo)) {
                 Log::channel('slackinfo')->info('LoginController@validarCodigo (appuca) inicio sesion un usuario admin', [$user]);
-                Auth::login($user);
+                Auth::login($user, true);
                 return redirect()->route('index', ['id' => $user->id]);
             }else{
                 Log::channel('slackerror')->error('LoginController@validarCodigo (appuca) ocurrio un problema al validar codigo con usuario admin', [$user]);
@@ -410,7 +410,9 @@ class LoginController extends Controller
 
     public function prueba(Request $request)
     {
-        // Generar un número aleatorio de 4 dígitos
+        dd(config('database'));
+
+        /* Generar un número aleatorio de 4 dígitos
         $random = sprintf("%04d", rand(0, 9999));
         $codigo = strval($random); //convertir a string
         $codigo_hash = password_hash($codigo, PASSWORD_DEFAULT);
@@ -432,6 +434,7 @@ class LoginController extends Controller
             "Status" => 200,
             "msg" => $codigo,
             "res" => $res
-        ], 200);
+        ], 200);*/
     }
+
 }
