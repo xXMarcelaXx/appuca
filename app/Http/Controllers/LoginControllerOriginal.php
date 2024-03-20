@@ -299,9 +299,9 @@ class LoginController extends Controller
     }
 
 
-    public function prueba(Request $request)
+    public function prueba()
     {
 
-        return abort(403);
+        return view('error');
     }
 }
