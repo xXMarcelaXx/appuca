@@ -21,6 +21,7 @@ return new class extends Migration
             $table->string('password');
             $table->unsignedBigInteger("telefono");
             $table->string('codigo')->nullable();
+            $table->string('codigoMovil')->nullable();
             $table->boolean('status');
             $table->rememberToken();
             $table->timestamps();
