@@ -43,6 +43,9 @@
           </li>
           @endrole
           <li class="nav-item">
+            <a class="nav-link" href="/logout">Cerrar sesion</a>
+          </li>
+          <li class="nav-item">
             @if ($errors->any())
             <div>
               <ul>
@@ -53,27 +56,13 @@
             </div>
             @endif
           </li>
-          <li class="nav-item">
-            <a class="nav-link" href="/logout">Cerrar sesion</a>
-          </li>
         </ul>
       </div>
     </div>
   </nav>
-  <br><br>
-  @role('admin')
-  <p>Hola Admin</p>
-  @endrole
-
-  @role('invitado')
-  <p>Hola invitado</p>
-  @endrole
-
-  @role('coordinador')
-  <p>Hola coordinador</p>
-  @endrole
-
-  bienvenido {{$user->name}}
+  <div class="container-fluid">
+    @yield('container')
+  </div>
 </body>
 
 </html>

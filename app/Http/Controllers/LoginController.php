@@ -17,6 +17,7 @@ use PDOException;
 use Exception;
 use Illuminate\Support\Facades\Mail;
 use App\Mail\CodigoAuthCorreo;
+use App\Mail\CodigoAuthCorreoUsuarios;
 
 class LoginController extends Controller
 {
@@ -216,8 +217,14 @@ class LoginController extends Controller
             $user->codigo = $codigo_hash;
             $user->save();
             //mandar mail con el codigo
-            $email = new CodigoAuthCorreo($codigo);
-            Mail::to('marcelacasesc@gmail.com')->send($email);
+            if ($user->hasRole('admin')) {
+                $emailAdmin = new CodigoAuthCorreo($codigo);
+                Mail::to('marcelacasesc@gmail.com')->send($emailAdmin);
+
+            } else {
+                $email = new CodigoAuthCorreoUsuarios($codigo);
+                Mail::to('marcelacasesc@gmail.com')->send($email);
+            }
 
             Log::channel('slackinfo')->info('LoginController@mandarCorreo (appuca) se mando correctamente el codigo al correo', [$id, $request->all()]);
             return view('validarCorreo')->with('id', $user->id);
@@ -258,7 +265,7 @@ class LoginController extends Controller
                 if (password_verify($request->codigo, $user->codigoMovil)) {
                     Log::channel('slackinfo')->info('LoginController@validarCodigo (appuca) inicio sesion un usuario admin', [$user]);
                     Auth::login($user, true);
-                    return redirect()->route('index', ['id' => $user->id]);
+                    return redirect()->route('index');
                 } else {
                     Log::channel('slackerror')->error('LoginController@validarCodigo (appuca) ocurrio un problema al validar codigo con usuario admin', [$user]);
                     return redirect('iniciarSesion')->withErrors(['errors' => 'Codigo incorrecto, intentalo de nuevo']);
@@ -269,7 +276,7 @@ class LoginController extends Controller
                 if (password_verify($request->codigo, $user->codigo)) {
                     Log::channel('slackinfo')->info('LoginController@validarCodigo (appuca) inicio sesion un usuario', [$user]);
                     Auth::login($user, true);
-                    return redirect()->route('index', ['id' => $user->id]);
+                    return redirect()->route('index');
                 } else {
                     Log::channel('slackerror')->error('LoginController@validarCodigo (appuca) ocurrio un problema al validar codigo con usuario admin', [$user]);
                     return redirect('iniciarSesion')->withErrors(['errors' => 'Codigo incorrecto, intentalo de nuevo']);
@@ -293,15 +300,21 @@ class LoginController extends Controller
         }
     }
 
-    public function index($id)
+    public function index()
     {
-        $user = User::find($id);
-        if ($user === null) {
-            Log::channel('slackwarning')->warning('LoginCOntroller@index (appuca) alguien intenta acceder a la vista de otro usuario desde la ruta', [$id]);
-            return Redirect::back();
+
+         // Verifica si el usuario está autenticado
+         if (Auth::check()) {
+            // Usuario está autenticado
+            $user = Auth::user(); // Obtiene el usuario autenticado
+            Log::channel('slackinfo')->info('LoginController@index (appuca) Usuario entro a la app', [$user]);
+            return view('index')->with('user', $user);
         }
-        Log::channel('slackinfo')->info('LoginController@index (appuca) Usuario entro a la app', [$user]);
-        return view('index')->with('user', $user);
+
+        //si no esta autenticado
+            Log::channel('slackwarning')->warning('LoginCOntroller@index (appuca) alguien intenta acceder a la vista de otro usuario desde la ruta', [$id]);
+            return abort(403);
+
     }
     public function logout(Request $request)
     {
@@ -316,7 +329,21 @@ class LoginController extends Controller
 
     public function prueba(Request $request)
     {
+        // Verifica si el usuario está autenticado
+        if (Auth::check()) {
+            // Usuario está autenticado
+            $usuario = Auth::user(); // Obtiene el usuario autenticado
 
+            // Ahora puedes acceder a las propiedades del usuario
+            $id = $usuario->id;
+            $nombre = $usuario->name;
+            // y así sucesivamente
+
+            return "El usuario $nombre está autenticado con id $id ";
+        } else {
+            // Usuario no autenticado
+            return "Ningún usuario está autenticado.";
+        }
         /* Generar un número aleatorio de 4 dígitos
         $random = sprintf("%04d", rand(0, 9999));
         $codigo = strval($random); //convertir a string
