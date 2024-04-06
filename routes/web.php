@@ -20,7 +20,7 @@ Route::get('/', function () {
     return view('login');
 });
 
-Route::middleware(['auth'])->group(function () {
+Route::middleware(['auth','ips'])->group(function () {
     Route::get('/index', [LoginController::class, 'index'])->name('index');
     Route::get('/logout', [LoginController::class, 'logout'])->name('logout');
 

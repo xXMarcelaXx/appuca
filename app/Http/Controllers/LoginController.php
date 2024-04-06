@@ -329,7 +329,7 @@ class LoginController extends Controller
 
     public function prueba(Request $request)
     {
-        // Verifica si el usuario está autenticado
+        /* Verifica si el usuario está autenticado
         if (Auth::check()) {
             // Usuario está autenticado
             $usuario = Auth::user(); // Obtiene el usuario autenticado
@@ -343,7 +343,9 @@ class LoginController extends Controller
         } else {
             // Usuario no autenticado
             return "Ningún usuario está autenticado.";
-        }
+        } */
+        
+        return $request->getClientIp();
         /* Generar un número aleatorio de 4 dígitos
         $random = sprintf("%04d", rand(0, 9999));
         $codigo = strval($random); //convertir a string

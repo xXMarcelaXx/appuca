@@ -22,3 +22,5 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     Route::post('/login', [LoginApiController::class, 'login']);
     Route::middleware('auth:sanctum')->get('/logout', [LoginApiController::class, 'logout']);
     Route::middleware('auth:sanctum')->post('/verificarCodigo', [LoginApiController::class, 'verificarCodigo']);
+
+    
