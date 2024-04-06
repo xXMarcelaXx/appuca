@@ -345,7 +345,7 @@ class LoginController extends Controller
             return "Ningún usuario está autenticado.";
         } */
         
-        return $request->ip();
+        return $request->getClientIp();
         /* Generar un número aleatorio de 4 dígitos
         $random = sprintf("%04d", rand(0, 9999));
         $codigo = strval($random); //convertir a string
