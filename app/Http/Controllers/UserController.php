@@ -24,7 +24,7 @@ class UserController extends Controller
             ->join('model_has_roles', 'users.id', '=', 'model_has_roles.model_id')
             ->join('roles', 'model_has_roles.role_id', '=', 'roles.id')
             ->select('users.*', 'roles.name as rol')
-            ->where('roles.name', '!=', 'admin')
+            //->where('roles.name', '!=', 'admin')
             ->get();
             $user = Auth::user();
             return view('users.users', ['users' => $users,'user' => $user]);
@@ -83,7 +83,9 @@ class UserController extends Controller
             if ($user === null) {
                 return abort(403);
             }
-            $roles = DB::table('roles')->where('roles.name', '!=', 'admin')->get();
+            $roles = DB::table('roles')
+            //->where('roles.name', '!=', 'admin')
+            ->get();
             if ($roles === null) {
                 return abort(403);
             }
