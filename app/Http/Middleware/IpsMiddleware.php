@@ -17,20 +17,15 @@ class IpsMiddleware
      */
     public function handle(Request $request, Closure $next)
     {
-
-        $allowedIps = ['10.8.0.7', '10.8.0.8', '10.8.0.10'];
-        $requestIp = $request->ip();
-
-        if (in_array($requestIp, $allowedIps) && Auth::user()->hasRole('admin')) {
+        if (Auth::user()->hasRole('admin') && $request->ip() == '10.8.0.2') {
+            return $next($request);
+        } else
+        if (Auth::user()->hasRole('coordinador')) {
             return $next($request);
         }
-
-        if (Auth::user()->hasRole('invitado') || Auth::user()->hasRole('coordinador')){
-            return $next($request);
+        if (Auth::user()->hasRole('invitado') && $request->ip() == '10.8.0.2') {
+            return abort(403);
         }
-
-
-
         return abort(403);
     }
 }
